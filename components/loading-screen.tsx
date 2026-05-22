@@ -9,29 +9,86 @@ export function LoadingScreen() {
   useEffect(() => {
     let fadeTimer: number | undefined;
     let removeTimer: number | undefined;
+    let safetyTimer: number | undefined;
+    let videoEl: HTMLVideoElement | null = null;
+    let onVideoReady: (() => void) | undefined;
+    let pageLoaded = document.readyState === "complete";
+    let videoReady = false;
+    let onPageLoad: (() => void) | undefined;
 
-    const startFade = () => {
-      fadeTimer = window.setTimeout(() => setPhase("fading"), 350);
-      removeTimer = window.setTimeout(() => setPhase("gone"), 350 + 650);
+    const tryStartFade = () => {
+      if (!pageLoaded || !videoReady) return;
+      fadeTimer = window.setTimeout(() => setPhase("fading"), 200);
+      removeTimer = window.setTimeout(() => setPhase("gone"), 200 + 650);
     };
 
-    if (document.readyState === "complete") {
-      startFade();
+    // 1. Wait for window.load (covers fonts, images, css, scripts)
+    if (pageLoaded) {
+      pageLoaded = true;
     } else {
-      window.addEventListener("load", startFade, { once: true });
-      // Safety net — never block the page beyond 2.5s
-      const cap = window.setTimeout(startFade, 2500);
-      return () => {
-        window.clearTimeout(cap);
-        window.removeEventListener("load", startFade);
-        if (fadeTimer) window.clearTimeout(fadeTimer);
-        if (removeTimer) window.clearTimeout(removeTimer);
+      onPageLoad = () => {
+        pageLoaded = true;
+        tryStartFade();
       };
+      window.addEventListener("load", onPageLoad, { once: true });
     }
+
+    // 2. Wait for the hero video to be ready to play through (desktop only;
+    //    on mobile the <video> isn't rendered, so we don't gate on it).
+    const checkVideo = () => {
+      videoEl = document.querySelector<HTMLVideoElement>("video[data-hero-video]");
+
+      if (!videoEl) {
+        // No hero video on the page (mobile, reduced-motion, or another route).
+        videoReady = true;
+        tryStartFade();
+        return;
+      }
+
+      // readyState 4 = HAVE_ENOUGH_DATA (can play through to end without stalling)
+      if (videoEl.readyState >= 4) {
+        videoReady = true;
+        tryStartFade();
+        return;
+      }
+
+      onVideoReady = () => {
+        videoReady = true;
+        tryStartFade();
+      };
+      videoEl.addEventListener("canplaythrough", onVideoReady, { once: true });
+      // Some browsers fire `loadeddata` reliably even when canplaythrough is slow
+      // for muted autoplay; accept either as "ready".
+      videoEl.addEventListener("loadeddata", () => {
+        if (videoEl && videoEl.readyState >= 3) {
+          videoReady = true;
+          tryStartFade();
+        }
+      }, { once: true });
+    };
+
+    // The hero mounts on the client too — wait one tick so the <video> exists in the DOM.
+    const rafId = window.requestAnimationFrame(checkVideo);
+
+    // 3. Safety cap — never block the page beyond 10s, even on a flaky connection.
+    safetyTimer = window.setTimeout(() => {
+      pageLoaded = true;
+      videoReady = true;
+      tryStartFade();
+    }, 10_000);
+
+    // Kick off in case both conditions are already met (very fast loads)
+    tryStartFade();
 
     return () => {
       if (fadeTimer) window.clearTimeout(fadeTimer);
       if (removeTimer) window.clearTimeout(removeTimer);
+      if (safetyTimer) window.clearTimeout(safetyTimer);
+      window.cancelAnimationFrame(rafId);
+      if (onPageLoad) window.removeEventListener("load", onPageLoad);
+      if (videoEl && onVideoReady) {
+        videoEl.removeEventListener("canplaythrough", onVideoReady);
+      }
     };
   }, []);
 
