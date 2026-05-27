@@ -10,85 +10,33 @@ export function LoadingScreen() {
     let fadeTimer: number | undefined;
     let removeTimer: number | undefined;
     let safetyTimer: number | undefined;
-    let videoEl: HTMLVideoElement | null = null;
-    let onVideoReady: (() => void) | undefined;
-    let pageLoaded = document.readyState === "complete";
-    let videoReady = false;
     let onPageLoad: (() => void) | undefined;
 
-    const tryStartFade = () => {
-      if (!pageLoaded || !videoReady) return;
+    const startFade = () => {
       fadeTimer = window.setTimeout(() => setPhase("fading"), 200);
       removeTimer = window.setTimeout(() => setPhase("gone"), 200 + 650);
     };
 
-    // 1. Wait for window.load (covers fonts, images, css, scripts)
-    if (pageLoaded) {
-      pageLoaded = true;
+    // Gate on window.load (fonts, the hero image, css). The hero is now a
+    // still photograph, so there's no video to wait on.
+    if (document.readyState === "complete") {
+      startFade();
     } else {
-      onPageLoad = () => {
-        pageLoaded = true;
-        tryStartFade();
-      };
+      onPageLoad = () => startFade();
       window.addEventListener("load", onPageLoad, { once: true });
     }
 
-    // 2. Wait for the hero video to be ready to play through (desktop only;
-    //    on mobile the <video> isn't rendered, so we don't gate on it).
-    const checkVideo = () => {
-      videoEl = document.querySelector<HTMLVideoElement>("video[data-hero-video]");
-
-      if (!videoEl) {
-        // No hero video on the page (mobile, reduced-motion, or another route).
-        videoReady = true;
-        tryStartFade();
-        return;
-      }
-
-      // readyState 4 = HAVE_ENOUGH_DATA (can play through to end without stalling)
-      if (videoEl.readyState >= 4) {
-        videoReady = true;
-        tryStartFade();
-        return;
-      }
-
-      onVideoReady = () => {
-        videoReady = true;
-        tryStartFade();
-      };
-      videoEl.addEventListener("canplaythrough", onVideoReady, { once: true });
-      // Some browsers fire `loadeddata` reliably even when canplaythrough is slow
-      // for muted autoplay; accept either as "ready".
-      videoEl.addEventListener("loadeddata", () => {
-        if (videoEl && videoEl.readyState >= 3) {
-          videoReady = true;
-          tryStartFade();
-        }
-      }, { once: true });
-    };
-
-    // The hero mounts on the client too — wait one tick so the <video> exists in the DOM.
-    const rafId = window.requestAnimationFrame(checkVideo);
-
-    // 3. Safety cap — never block the page beyond 10s, even on a flaky connection.
+    // Safety cap — never block the page beyond 8s on a flaky connection.
     safetyTimer = window.setTimeout(() => {
-      pageLoaded = true;
-      videoReady = true;
-      tryStartFade();
-    }, 10_000);
-
-    // Kick off in case both conditions are already met (very fast loads)
-    tryStartFade();
+      setPhase("fading");
+      window.setTimeout(() => setPhase("gone"), 650);
+    }, 8_000);
 
     return () => {
       if (fadeTimer) window.clearTimeout(fadeTimer);
       if (removeTimer) window.clearTimeout(removeTimer);
       if (safetyTimer) window.clearTimeout(safetyTimer);
-      window.cancelAnimationFrame(rafId);
       if (onPageLoad) window.removeEventListener("load", onPageLoad);
-      if (videoEl && onVideoReady) {
-        videoEl.removeEventListener("canplaythrough", onVideoReady);
-      }
     };
   }, []);
 
@@ -109,7 +57,7 @@ export function LoadingScreen() {
     <div
       aria-hidden="true"
       className={[
-        "fixed inset-0 z-[100] bg-terracotta flex flex-col items-center justify-center transition-opacity duration-[600ms] ease-out",
+        "fixed inset-0 z-[100] bg-stone flex flex-col items-center justify-center transition-opacity duration-[600ms] ease-out",
         phase === "fading" ? "opacity-0" : "opacity-100",
       ].join(" ")}
     >
@@ -124,11 +72,11 @@ export function LoadingScreen() {
             className="h-14 w-14 md:h-16 md:w-16 select-none animate-[pulse_1.6s_ease-in-out_infinite]"
           />
         </div>
-        <p className="mt-6 font-serif text-white text-[18px] md:text-[20px] tracking-tight leading-none">
+        <p className="mt-6 font-serif text-ink text-[18px] md:text-[20px] tracking-tight leading-none">
           Agile Ageing Alliance
         </p>
-        <div className="mt-7 h-[2px] w-24 bg-cream/30 overflow-hidden rounded-full">
-          <div className="h-full w-full bg-cream origin-left animate-[loading-bar_1.6s_ease-in-out_infinite]" />
+        <div className="mt-7 h-[2px] w-24 bg-ink/15 overflow-hidden rounded-full">
+          <div className="h-full w-full bg-amber origin-left animate-[loading-bar_1.6s_ease-in-out_infinite]" />
         </div>
       </div>
       <style>{`

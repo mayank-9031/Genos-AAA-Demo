@@ -18,6 +18,9 @@ const buttonVariants = cva(
         // Cream-on-dark — used in navbar over hero (OCRE-style)
         cream:
           "bg-cream text-ink hover:bg-white focus-visible:ring-white focus-visible:ring-offset-transparent",
+        // Ink-solid — calm, authoritative primary used on the stone hero
+        ink:
+          "bg-ink text-stone hover:bg-ink/90 focus-visible:ring-ink focus-visible:ring-offset-stone",
       },
       size: {
         default: "px-6 py-3",
