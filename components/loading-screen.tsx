@@ -13,12 +13,10 @@ export function LoadingScreen() {
     let onPageLoad: (() => void) | undefined;
 
     const startFade = () => {
-      fadeTimer = window.setTimeout(() => setPhase("fading"), 200);
-      removeTimer = window.setTimeout(() => setPhase("gone"), 200 + 650);
+      fadeTimer = window.setTimeout(() => setPhase("fading"), 150);
+      removeTimer = window.setTimeout(() => setPhase("gone"), 150 + 600);
     };
 
-    // Gate on window.load (fonts, the hero image, css). The hero is now a
-    // still photograph, so there's no video to wait on.
     if (document.readyState === "complete") {
       startFade();
     } else {
@@ -26,10 +24,10 @@ export function LoadingScreen() {
       window.addEventListener("load", onPageLoad, { once: true });
     }
 
-    // Safety cap — never block the page beyond 8s on a flaky connection.
+    // Safety cap — never block the page beyond 8s.
     safetyTimer = window.setTimeout(() => {
       setPhase("fading");
-      window.setTimeout(() => setPhase("gone"), 650);
+      window.setTimeout(() => setPhase("gone"), 600);
     }, 8_000);
 
     return () => {
@@ -62,29 +60,19 @@ export function LoadingScreen() {
       ].join(" ")}
     >
       <div className="flex flex-col items-center">
-        <div className="relative">
-          <Image
-            src="/aaa-mark.png"
-            alt=""
-            width={72}
-            height={72}
-            priority
-            className="h-14 w-14 md:h-16 md:w-16 select-none animate-[pulse_1.6s_ease-in-out_infinite]"
-          />
-        </div>
-        <p className="mt-6 font-serif text-ink text-[18px] md:text-[20px] tracking-tight leading-none">
+        <Image
+          src="/aaa-mark.png"
+          alt=""
+          width={64}
+          height={64}
+          priority
+          className="h-12 w-12 md:h-14 md:w-14 select-none"
+        />
+        <p className="mt-5 font-serif text-ink text-[16px] md:text-[18px] tracking-tight leading-none">
           Agile Ageing Alliance
         </p>
-        <div className="mt-7 h-[2px] w-24 bg-ink/15 overflow-hidden rounded-full">
-          <div className="h-full w-full bg-amber origin-left animate-[loading-bar_1.6s_ease-in-out_infinite]" />
-        </div>
+        <div className="mt-5 h-px w-10 bg-ink/20" aria-hidden="true" />
       </div>
-      <style>{`
-        @keyframes loading-bar {
-          0%   { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
     </div>
   );
 }

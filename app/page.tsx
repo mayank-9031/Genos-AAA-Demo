@@ -1,13 +1,17 @@
 import { Hero } from "@/components/hero";
-import { WhyNow } from "@/components/why-now";
-import { ClosingInvitation } from "@/components/closing-invitation";
+import { TrustBand } from "@/components/trust-band";
+import { Framework } from "@/components/framework";
+import { DemonstratorPathway } from "@/components/demonstrator-pathway";
+import { WhyItMatters } from "@/components/why-it-matters";
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <WhyNow />
-      <ClosingInvitation />
+      <TrustBand />
+      <Framework />
+      <DemonstratorPathway />
+      <WhyItMatters />
     </main>
   );
 }

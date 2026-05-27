@@ -1,98 +1,46 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-type SubItem = {
+type NavLink = {
   label: string;
   href: string;
   external?: boolean;
 };
 
-type NavGroup = {
-  label: string;
-  items: SubItem[];
-};
-
-const NAV_GROUPS: NavGroup[] = [
-  {
-    label: "About",
-    items: [
-      { label: "About the alliance", href: "https://agileageing.org/page/about/", external: true },
-      { label: "ISO 25553", href: "https://agileageing.org/standards/", external: true },
-    ],
-  },
-  {
-    label: "Watch",
-    items: [
-      { label: "Watch the film", href: "#watch" },
-      { label: "Demonstrators", href: "#demonstrator" },
-    ],
-  },
-  {
-    label: "Research",
-    items: [
-      { label: "Research", href: "https://agileageing.org/research/", external: true },
-      { label: "Events", href: "https://agileageing.org/events/", external: true },
-    ],
-  },
-  {
-    label: "Contact",
-    items: [
-      { label: "Contact us", href: "https://agileageing.org/page/contact/", external: true },
-      { label: "Get involved", href: "https://agileageing.org/iso-discussion-contact-form/", external: true },
-    ],
-  },
+const NAV_LINKS: NavLink[] = [
+  { label: "About", href: "https://agileageing.org/page/about/", external: true },
+  { label: "ISO 25553", href: "https://agileageing.org/standards/", external: true },
+  { label: "NOHA", href: "https://agileageing.org/nof/", external: true },
+  { label: "Demonstrators", href: "#demonstrator" },
+  { label: "Research", href: "https://agileageing.org/research/", external: true },
 ];
 
-const GET_INVOLVED_HREF = "https://agileageing.org/iso-discussion-contact-form/";
+const CONTACT_HREF = "https://agileageing.org/page/contact/";
 
 export function Navbar() {
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const closeTimerRef = useRef<number | null>(null);
-
-  const cancelClose = () => {
-    if (closeTimerRef.current !== null) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-  };
-
-  const scheduleClose = () => {
-    cancelClose();
-    closeTimerRef.current = window.setTimeout(() => setOpenMenu(null), 150);
-  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpenMenu(null);
-        setMobileOpen(false);
-      }
+      if (e.key === "Escape") setMobileOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => () => cancelClose(), []);
-
   // Hide the bar once the hero has scrolled out of the navbar's zone.
   useEffect(() => {
     const hero = document.getElementById("top");
     if (!hero) return;
-
     const NAV_HEIGHT_PX = 80;
     const compute = () => {
-      const rect = hero.getBoundingClientRect();
-      const pastHero = rect.bottom <= NAV_HEIGHT_PX;
+      const pastHero = hero.getBoundingClientRect().bottom <= NAV_HEIGHT_PX;
       setHidden(pastHero);
-      if (pastHero) {
-        setOpenMenu(null);
-        setMobileOpen(false);
-      }
+      if (pastHero) setMobileOpen(false);
     };
     compute();
     window.addEventListener("scroll", compute, { passive: true });
@@ -125,83 +73,26 @@ export function Navbar() {
             priority
             className="h-7 w-7 md:h-8 md:w-8 select-none"
           />
-          <span className="hidden sm:inline font-serif text-[17px] md:text-[19px] tracking-tight leading-none text-ink">
+          <span className="hidden sm:inline font-serif text-[16px] md:text-[18px] tracking-tight leading-none text-ink">
             Agile Ageing Alliance
           </span>
         </a>
 
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-8" onMouseLeave={scheduleClose}>
-          {NAV_GROUPS.map((group) => {
-            const isOpen = openMenu === group.label;
-            return (
-              <div
-                key={group.label}
-                className="relative"
-                onMouseEnter={() => {
-                  cancelClose();
-                  setOpenMenu(group.label);
-                }}
-              >
-                <button
-                  type="button"
-                  aria-haspopup="menu"
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenMenu(isOpen ? null : group.label)}
-                  onFocus={() => {
-                    cancelClose();
-                    setOpenMenu(group.label);
-                  }}
-                  className="flex items-center gap-1.5 text-ink/80 hover:text-ink text-[15px] py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]"
-                >
-                  <span>{group.label}</span>
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    aria-hidden="true"
-                    className={["transition-transform duration-200", isOpen ? "rotate-180" : "rotate-0"].join(" ")}
-                  >
-                    <path d="M2 3.5 L5 6.5 L8 3.5" />
-                  </svg>
-                </button>
-
-                <div
-                  role="menu"
-                  className={[
-                    "absolute left-0 top-full mt-2 min-w-[220px] bg-white text-ink rounded-[3px] shadow-[0_8px_24px_rgba(11,37,69,0.12)] border border-ink/5 transition-[opacity,transform] duration-150",
-                    isOpen
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-1 pointer-events-none",
-                  ].join(" ")}
-                >
-                  <ul className="py-2">
-                    {group.items.map((sub) => (
-                      <li key={sub.label}>
-                        <a
-                          role="menuitem"
-                          href={sub.href}
-                          target={sub.external ? "_blank" : undefined}
-                          rel={sub.external ? "noopener noreferrer" : undefined}
-                          className="block px-4 py-2.5 text-[14px] hover:bg-stone hover:text-amber transition-colors"
-                        >
-                          {sub.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            );
-          })}
-
-          <Button href={GET_INVOLVED_HREF} external variant="ink" size="pill">
-            <span>Get involved</span>
-            <span aria-hidden="true">→</span>
+        {/* Desktop nav — flat links + one CTA */}
+        <nav className="hidden lg:flex items-center gap-8">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
+              className="text-ink/75 hover:text-ink text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]"
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button href={CONTACT_HREF} external variant="ink" size="pill">
+            Contact
           </Button>
         </nav>
 
@@ -241,42 +132,27 @@ export function Navbar() {
 
       {/* Mobile menu sheet */}
       <div
-        id="full-menu"
         className={[
           "lg:hidden overflow-hidden bg-stone border-t border-ink/10 transition-[max-height] duration-300 ease-out",
-          mobileOpen ? "max-h-[800px]" : "max-h-0",
+          mobileOpen ? "max-h-[480px]" : "max-h-0",
         ].join(" ")}
       >
         <nav className="px-6 md:px-12 py-4 flex flex-col">
-          {NAV_GROUPS.map((group) => (
-            <div key={group.label} className="py-3 border-b border-ink/10 last:border-b-0">
-              <p className="text-sage text-[11px] uppercase tracking-[0.18em]">{group.label}</p>
-              <ul className="mt-2 flex flex-col">
-                {group.items.map((sub) => (
-                  <li key={sub.label}>
-                    <a
-                      href={sub.href}
-                      target={sub.external ? "_blank" : undefined}
-                      rel={sub.external ? "noopener noreferrer" : undefined}
-                      onClick={() => setMobileOpen(false)}
-                      className="block py-2 text-ink/80 hover:text-ink text-[15px]"
-                    >
-                      {sub.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          <div className="mt-4 pb-3">
-            <Button
-              href={GET_INVOLVED_HREF}
-              external
-              variant="ink"
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
               onClick={() => setMobileOpen(false)}
+              className="py-3 border-b border-ink/10 text-ink/80 hover:text-ink text-[15px]"
             >
-              <span>Get involved</span>
-              <span aria-hidden="true">→</span>
+              {link.label}
+            </a>
+          ))}
+          <div className="mt-4 pb-2">
+            <Button href={CONTACT_HREF} external variant="ink" onClick={() => setMobileOpen(false)}>
+              Contact
             </Button>
           </div>
         </nav>
