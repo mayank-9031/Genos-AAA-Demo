@@ -2,6 +2,11 @@ import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 
+const TRUST = [
+  "Developed within ISO/TC 314 — Ageing Societies",
+  "In partnership with UN-Habitat",
+];
+
 export function Hero() {
   return (
     <section id="top" className="relative w-full bg-stone">
@@ -91,22 +96,21 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Trust strip — one real, verifiable credential, stated once */}
+      {/* Trust strip — verified credentials, stated once and quietly */}
       <div className="border-t border-ink/10 bg-cream">
-        <div className="px-6 md:px-12 lg:px-16 xl:px-24 py-4 flex flex-wrap items-center gap-x-5 gap-y-3">
-          <span className="inline-flex items-center rounded-[3px] border border-ink/10 bg-white px-2.5 py-1.5">
-            <Image
-              src="/aaa-logo.png"
-              alt="Agile Ageing Alliance with ISO — Ageing Societies, ISO/TC 314"
-              width={600}
-              height={300}
-              className="h-10 md:h-12 w-auto"
-            />
-          </span>
-          <span aria-hidden="true" className="hidden sm:block h-8 w-px bg-ink/15" />
-          <span className="text-ink/70 text-[10.5px] md:text-[11px] tracking-[0.14em] uppercase">
-            In partnership with UN-Habitat
-          </span>
+        <div className="px-6 md:px-12 lg:px-16 xl:px-24 py-3.5 flex flex-wrap items-center gap-x-6 gap-y-1.5">
+          {TRUST.map((item, i) => (
+            <span key={item} className="flex items-center">
+              {i > 0 && (
+                <span aria-hidden="true" className="text-ink/25 mr-6 hidden sm:inline">
+                  ·
+                </span>
+              )}
+              <span className="text-ink/70 text-[10.5px] md:text-[11px] tracking-[0.14em] uppercase">
+                {item}
+              </span>
+            </span>
+          ))}
         </div>
       </div>
     </section>
