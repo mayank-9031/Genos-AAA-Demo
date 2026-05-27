@@ -26,10 +26,10 @@ export function Footer() {
               />
             </div>
             <p className="text-stone/80 text-[14.5px] leading-relaxed max-w-[40ch] mt-6">
-              Convening organisation for ISO 25553 Smart Multigenerational
-              Neighbourhoods. Partner of UN-Habitat. Advisor to Innovate UK and
-              the European Commission. Honorary chair at UCL Bartlett School of
-              Sustainable Construction.
+              Convening organisation for ISO 25553 — Smart Multigenerational
+              Neighbourhoods, developed within ISO/TC 314, in partnership with
+              UN-Habitat. Advisor to Innovate UK and the European Commission,
+              with academic links to UCL Bartlett.
             </p>
           </div>
 
@@ -119,12 +119,19 @@ export function Footer() {
         </div>
 
         <div className="border-t border-stone/15 mt-14 pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[12.5px] text-stone/60">
-          <p>
-            © {new Date().getFullYear()} Agile Ageing Alliance. All rights
-            reserved.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p>© {new Date().getFullYear()} Agile Ageing Alliance. All rights reserved.</p>
+            <span aria-hidden="true" className="hidden md:inline text-stone/30">·</span>
+            <a href="/accessibility" className="hover:text-amber transition-colors duration-200">
+              Accessibility
+            </a>
+            <span aria-hidden="true" className="text-stone/30">·</span>
+            <a href="/privacy" className="hover:text-amber transition-colors duration-200">
+              Privacy
+            </a>
+          </div>
           <p className="tracking-[0.14em] uppercase text-[10.5px]">
-            Established 2015  ·  ISO 25553 published 2026
+            Established 2015  ·  ISO/TC 314 — Ageing Societies
           </p>
         </div>
       </div>

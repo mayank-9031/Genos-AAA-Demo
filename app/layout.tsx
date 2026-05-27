@@ -19,14 +19,22 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Agile Ageing Alliance — How the world will age well, at home.",
+  metadataBase: new URL("https://genos-aaa-demo.vercel.app"),
+  title: "Agile Ageing Alliance — ISO 25553 Smart Multigenerational Neighbourhoods",
   description:
-    "We convene the international standard for smart multigenerational neighbourhoods. With ISO 25553 now published, we're moving from framework to real-world implementation — alongside cities, governments, and partners around the world.",
+    "The Agile Ageing Alliance supports the implementation of ISO 25553 for age-friendly, multigenerational neighbourhoods — through demonstrator partnerships, applied research and cross-sector collaboration.",
   openGraph: {
-    title: "Agile Ageing Alliance — How the world will age well, at home.",
+    title: "Agile Ageing Alliance — ISO 25553",
     description:
-      "Convening organisation for ISO 25553 Smart Multigenerational Neighbourhoods.",
+      "Supporting the implementation of ISO 25553 for age-friendly, multigenerational neighbourhoods.",
     type: "website",
+    siteName: "Agile Ageing Alliance",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Agile Ageing Alliance — ISO 25553",
+    description:
+      "Supporting the implementation of ISO 25553 for age-friendly, multigenerational neighbourhoods.",
   },
 };
 

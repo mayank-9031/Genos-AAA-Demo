@@ -11,7 +11,8 @@ const config: Config = {
         ink: "#0B2545",
         stone: "#F4EFE6",
         amber: "#D98E36",
-        sage: "#7A8D7A",
+        // Darkened from #7A8D7A so small uppercase labels meet WCAG 2.2 AA (4.5:1) on stone/cream
+        sage: "#5C6E57",
         charcoal: "#1A1A1A",
         // OCRE-style hero base — warm burnt terracotta
         terracotta: "#B5572B",

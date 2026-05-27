@@ -1,26 +1,17 @@
+import { Fragment } from "react";
 import { Reveal } from "@/components/reveal";
 
-type Item = {
+type Node = {
   term: string;
-  definition: string;
+  caption: string;
 };
 
-const ITEMS: Item[] = [
-  {
-    term: "Agile Ageing Alliance",
-    definition:
-      "A cross-sector alliance working across health, housing, planning, technology and policy. It convenes expertise to help develop shared standards and support their adoption by public bodies and partners.",
-  },
-  {
-    term: "ISO 25553",
-    definition:
-      "An international standard, developed within ISO/TC 314 (Ageing Societies), setting out how neighbourhoods can be designed to support people at every stage of life — across housing, services and infrastructure.",
-  },
-  {
-    term: "NOHA — Neighbourhood Open Health Architecture",
-    definition:
-      "An open framework for putting the standard into practice: connecting local services, data and infrastructure, with privacy and accountability built in. Currently moving towards launch.",
-  },
+const NODES: Node[] = [
+  { term: "Agile Ageing Alliance", caption: "A cross-sector convening alliance" },
+  { term: "ISO 25553", caption: "The international standard, within ISO/TC 314" },
+  { term: "NOHA", caption: "An open framework for putting it into practice" },
+  { term: "Demonstrators", caption: "Applied with partners, in real places" },
+  { term: "Outcomes", caption: "Evidence for wider adoption" },
 ];
 
 export function Framework() {
@@ -30,7 +21,7 @@ export function Framework() {
         <div className="max-w-[680px]">
           <Reveal y={8}>
             <p className="text-sage text-[11px] tracking-[0.18em] uppercase">
-              What we do
+              How the work fits together
             </p>
           </Reveal>
           <Reveal delay={60} y={8}>
@@ -38,26 +29,48 @@ export function Framework() {
               An international standard, and the means to implement it.
             </h2>
           </Reveal>
+          <Reveal delay={120} y={8}>
+            <p className="text-charcoal text-[15px] md:text-[16px] leading-[1.6] mt-5">
+              From a convening alliance to measurable local outcomes — each part
+              connects to the next.
+            </p>
+          </Reveal>
         </div>
 
-        <Reveal delay={120} y={10}>
-          <dl className="mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/10 border border-ink/10">
-            {ITEMS.map((item, i) => (
-              <div key={item.term} className="bg-stone p-7 md:p-8">
-                <dt>
-                  <span className="block text-sage text-[10.5px] tracking-[0.18em] uppercase">
+        <Reveal delay={160} y={10}>
+          <div
+            role="list"
+            aria-label="Framework: from the alliance to local outcomes"
+            className="mt-12 md:mt-14 flex flex-col md:flex-row md:items-stretch"
+          >
+            {NODES.map((node, i) => (
+              <Fragment key={node.term}>
+                <div
+                  role="listitem"
+                  className="md:flex-1 bg-white border border-ink/12 rounded-[3px] p-5 flex flex-col"
+                >
+                  <span className="text-sage text-[10px] tracking-[0.18em] uppercase">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="block font-serif text-ink text-[18px] md:text-[19px] leading-snug mt-3">
-                    {item.term}
+                  <span className="font-serif text-ink text-[16px] md:text-[16.5px] leading-snug mt-2">
+                    {node.term}
                   </span>
-                </dt>
-                <dd className="text-charcoal text-[14.5px] leading-[1.65] mt-4">
-                  {item.definition}
-                </dd>
-              </div>
+                  <span className="text-charcoal/85 text-[13px] leading-[1.5] mt-2">
+                    {node.caption}
+                  </span>
+                </div>
+                {i < NODES.length - 1 && (
+                  <div
+                    aria-hidden="true"
+                    className="flex items-center justify-center text-ink/30 shrink-0 py-1.5 md:py-0 md:px-2.5"
+                  >
+                    <span className="md:hidden">↓</span>
+                    <span className="hidden md:inline">→</span>
+                  </div>
+                )}
+              </Fragment>
             ))}
-          </dl>
+          </div>
         </Reveal>
       </div>
     </section>

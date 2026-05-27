@@ -19,16 +19,16 @@ export function Hero() {
               className="font-serif font-medium text-ink leading-[1.16] tracking-[-0.01em] mt-6 max-w-[20ch]"
               style={{ fontSize: "clamp(27px, 2.9vw, 42px)" }}
             >
-              Supporting the implementation of ISO&nbsp;25553 for age-friendly,
-              multigenerational neighbourhoods.
+              A standard for neighbourhoods where it&apos;s good to grow old.
             </h1>
           </Reveal>
 
           <Reveal delay={300} y={8}>
             <p className="mt-6 max-w-[52ch] text-charcoal text-[15.5px] md:text-[16.5px] leading-[1.6]">
-              We work with standards bodies, public authorities, universities and
-              communities to turn an international standard into practical,
-              locally delivered change.
+              AAA supports the implementation of ISO 25553 for age-friendly,
+              multigenerational neighbourhoods. We work with standards bodies,
+              public authorities, universities and communities to turn it into
+              practical, locally delivered change.
             </p>
           </Reveal>
 
