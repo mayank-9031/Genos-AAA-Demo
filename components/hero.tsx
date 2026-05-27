@@ -1,152 +1,112 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Reveal } from "@/components/reveal";
+import { Button } from "@/components/ui/button";
 
 export function Hero() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener?.("change", handler);
-    return () => mq.removeEventListener?.("change", handler);
-  }, []);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v || reducedMotion) return;
-    const tryPlay = () => v.play().catch(() => {});
-    if (v.readyState >= 2) tryPlay();
-    else v.addEventListener("loadeddata", tryPlay, { once: true });
-  }, [reducedMotion]);
-
   return (
-    <section
-      id="top"
-      className="relative w-full bg-terracotta overflow-hidden lg:h-screen"
-      style={{ height: "100svh" }}
-    >
-      <div className="flex flex-col lg:grid lg:grid-cols-2 lg:h-full h-full">
-        {/* LEFT — terracotta content */}
-        <div className="relative flex flex-col text-white lg:h-full">
-          {/* Top spacer matching navbar height */}
-          <div className="h-16 md:h-20 shrink-0" aria-hidden="true" />
+    <section id="top" className="relative w-full bg-stone">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:min-h-[80vh]">
+        {/* LEFT — content */}
+        <div className="flex flex-col justify-center px-6 md:px-12 lg:px-16 xl:px-24 pt-24 pb-12 md:pt-28 lg:py-24">
+          <Reveal delay={120} y={12}>
+            <p className="text-sage text-[10.5px] md:text-[11px] tracking-[0.22em] uppercase">
+              ISO 25553 · Smart Multigenerational Neighbourhoods
+            </p>
+          </Reveal>
 
-          <div className="px-6 md:px-14 lg:px-16 xl:px-24 pt-8 md:pt-14 pb-10 flex-1 flex flex-col min-h-0 justify-center">
-            <Reveal delay={150} y={12}>
-              <p className="text-cream/90 text-[10.5px] md:text-[11px] tracking-[0.2em] uppercase">
-                ISO 25553 · Published 2026 · 20 national standards bodies
-              </p>
-            </Reveal>
+          <Reveal delay={220} y={18}>
+            <h1
+              className="font-serif font-medium text-ink leading-[1.08] tracking-[-0.02em] mt-7 max-w-[15ch]"
+              style={{ fontSize: "clamp(33px, 3.7vw, 56px)" }}
+            >
+              A standard for neighbourhoods where it&apos;s good to grow old.
+            </h1>
+          </Reveal>
 
-            <Reveal delay={250} y={20}>
-              <h1
-                className="font-serif font-medium text-white leading-[1.05] tracking-[-0.015em] mt-8"
-                style={{ fontSize: "clamp(30px, 3.4vw, 52px)" }}
+          <Reveal delay={360} y={8}>
+            <div className="mt-7 h-[2px] w-11 bg-amber" aria-hidden="true" />
+          </Reveal>
+
+          <Reveal delay={460} y={12}>
+            <p className="mt-7 max-w-[46ch] text-charcoal/80 text-[15.5px] md:text-[17px] leading-[1.55]">
+              ISO 25553 sets out what good looks like. We work with the cities,
+              councils and communities turning it into real places.
+            </p>
+          </Reveal>
+
+          <Reveal delay={600} y={12}>
+            <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
+              <Button
+                href="https://agileageing.org/standards/"
+                external
+                variant="ink"
+                size="default"
+                className="group"
               >
-                The world just agreed
-                <br />
-                on what a good place
-                <br />
-                to grow old looks like.
-              </h1>
-            </Reveal>
-
-            <Reveal delay={400} y={8}>
-              <div className="mt-7 h-[2px] w-12 bg-cream/80" aria-hidden="true" />
-            </Reveal>
-
-            <Reveal delay={500} y={12}>
-              <p className="mt-7 max-w-[520px] font-serif italic text-white/90 text-[15px] md:text-[17px] leading-[1.45]">
-                Now we&apos;re putting it into the ground — with the cities, councils
-                and residents already building the alternative.
-              </p>
-            </Reveal>
-
-            <Reveal delay={650} y={12}>
-              <div className="mt-10 flex flex-wrap items-center gap-5">
-                <a
-                  href="https://agileageing.org/standards/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-between gap-5 bg-cream text-ink rounded-[3px] pl-5 pr-4 py-3 text-[14px] font-medium hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] hover:-translate-y-[1px] transition-all duration-200 min-w-[210px]"
+                <span>Read the standard</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover:translate-x-1"
                 >
-                  <span>Read ISO 25553</span>
-                  <span
-                    aria-hidden="true"
-                    className="text-[16px] transition-transform duration-200 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </a>
+                  →
+                </span>
+              </Button>
 
-                <a
-                  href="#demonstrator"
-                  className="group text-white underline underline-offset-[5px] decoration-1 hover:decoration-2 text-[14px] font-medium inline-flex items-center gap-1.5"
+              <a
+                href="#demonstrator"
+                className="group text-ink underline underline-offset-[5px] decoration-1 hover:decoration-2 text-[14.5px] font-medium inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]"
+              >
+                <span>Explore the demonstrator pathway</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover:translate-x-1"
                 >
-                  <span>Or work with us on a demonstrator</span>
-                  <span aria-hidden="true" className="opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">→</span>
-                </a>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Marquee — bottom of left column */}
-          <div className="border-t border-white/15 overflow-hidden">
-            <div className="marquee-track flex w-max whitespace-nowrap py-3 md:py-3.5">
-              {Array.from({ length: 2 }).map((_, dup) => (
-                <div key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
-                  {[
-                    "Convening organisation for ISO 25553.",
-                    "Endorsed by 20 national standards bodies.",
-                    "In partnership with UN-Habitat & Connected Places Catapult.",
-                    "2,000+ experts across health, housing, planning, technology, policy.",
-                    "Framework moving from paper into place.",
-                  ].map((item, i) => (
-                    <span
-                      key={`${dup}-${i}`}
-                      className="flex items-center text-white/85 text-[12.5px] md:text-[13px]"
-                    >
-                      <span className="px-6 md:px-8">{item}</span>
-                      <span aria-hidden="true" className="text-white/35">•</span>
-                    </span>
-                  ))}
-                </div>
-              ))}
+                  →
+                </span>
+              </a>
             </div>
-          </div>
+          </Reveal>
         </div>
 
-        {/* RIGHT — full-bleed video (desktop only; hidden on mobile) */}
-        <div className="hidden lg:block relative overflow-hidden bg-ink lg:h-full">
-          {!reducedMotion && (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              tabIndex={-1}
-              data-hero-video=""
-              className="absolute inset-0 h-full w-full object-cover"
-            >
-              <source src="/hero-care.mp4" type="video/mp4" />
-            </video>
-          )}
+        {/* RIGHT — calm still photograph, lightly graded to the palette */}
+        <div className="relative min-h-[280px] sm:min-h-[360px] lg:min-h-0 bg-cream overflow-hidden">
+          <Image
+            src="/hero-neighbourhood.jpg"
+            alt="Residents of different generations together on a sunlit residential street"
+            fill
+            priority
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover saturate-[0.92]"
+          />
+          {/* Soft seam so the photo meets the stone column gently on desktop */}
           <div
             aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(181,87,43,0.08) 0%, rgba(0,0,0,0) 25%)",
-            }}
+            className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-stone/70 to-transparent"
           />
+          {/* Quiet grounding vignette for depth */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/15 to-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Trust strip — one real, verifiable credential, stated once */}
+      <div className="border-t border-ink/10 bg-cream">
+        <div className="px-6 md:px-12 lg:px-16 xl:px-24 py-4 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <span className="inline-flex items-center rounded-[3px] border border-ink/10 bg-white px-2.5 py-1.5">
+            <Image
+              src="/aaa-logo.png"
+              alt="Agile Ageing Alliance with ISO — Ageing Societies, ISO/TC 314"
+              width={600}
+              height={300}
+              className="h-10 md:h-12 w-auto"
+            />
+          </span>
+          <span aria-hidden="true" className="hidden sm:block h-8 w-px bg-ink/15" />
+          <span className="text-ink/70 text-[10.5px] md:text-[11px] tracking-[0.14em] uppercase">
+            In partnership with UN-Habitat
+          </span>
         </div>
       </div>
     </section>

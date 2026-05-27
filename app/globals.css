@@ -12,25 +12,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Native video can leak rounded corners on iOS — clip explicitly. */
-video {
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  animation: marquee 38s linear infinite;
-  will-change: transform;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
