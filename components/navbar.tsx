@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CONTACT_URL } from "@/lib/links";
 
 type NavLink = {
   label: string;
@@ -11,14 +13,12 @@ type NavLink = {
 };
 
 const NAV_LINKS: NavLink[] = [
-  { label: "About", href: "https://agileageing.org/page/about/", external: true },
-  { label: "ISO 25553", href: "https://agileageing.org/standards/", external: true },
+  { label: "About", href: "/about" },
+  { label: "ISO 25553", href: "/iso-25553" },
   { label: "NOHA", href: "https://agileageing.org/nof/", external: true },
-  { label: "Demonstrators", href: "#demonstrator" },
+  { label: "Demonstrators", href: "/#demonstrator" },
   { label: "Research", href: "https://agileageing.org/research/", external: true },
 ];
-
-const CONTACT_HREF = "https://agileageing.org/page/contact/";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -60,8 +60,8 @@ export function Navbar() {
       ].join(" ")}
     >
       <div className="h-16 md:h-20 px-6 md:px-12 lg:px-16 xl:px-24 flex items-center justify-between">
-        <a
-          href="#top"
+        <Link
+          href="/"
           aria-label="Agile Ageing Alliance — home"
           className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]"
         >
@@ -76,22 +76,30 @@ export function Navbar() {
           <span className="hidden sm:inline font-serif text-[16px] md:text-[18px] tracking-tight leading-none text-ink">
             Agile Ageing Alliance
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav — flat links + one CTA */}
         <nav className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noopener noreferrer" : undefined}
-              className="text-ink/75 hover:text-ink text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]"
-            >
-              {link.label}
-            </a>
-          ))}
-          <Button href={CONTACT_HREF} external variant="ink" size="pill">
+          {NAV_LINKS.map((link) => {
+            const linkClasses =
+              "text-ink/75 hover:text-ink text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]";
+            return link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClasses}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link key={link.label} href={link.href} className={linkClasses}>
+                {link.label}
+              </Link>
+            );
+          })}
+          <Button href={CONTACT_URL} external variant="ink" size="pill">
             Contact
           </Button>
         </nav>
@@ -138,20 +146,33 @@ export function Navbar() {
         ].join(" ")}
       >
         <nav className="px-6 md:px-12 py-4 flex flex-col">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noopener noreferrer" : undefined}
-              onClick={() => setMobileOpen(false)}
-              className="py-3 border-b border-ink/10 text-ink/80 hover:text-ink text-[15px]"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const mobileClasses =
+              "py-3 border-b border-ink/10 text-ink/80 hover:text-ink text-[15px]";
+            return link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className={mobileClasses}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={mobileClasses}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <div className="mt-4 pb-2">
-            <Button href={CONTACT_HREF} external variant="ink" onClick={() => setMobileOpen(false)}>
+            <Button href={CONTACT_URL} external variant="ink" onClick={() => setMobileOpen(false)}>
               Contact
             </Button>
           </div>
