@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CONTACT_URL } from "@/lib/links";
+import { GET_INVOLVED_URL } from "@/lib/links";
 
 type NavLink = {
   label: string;
@@ -16,15 +16,18 @@ type NavLink = {
 const NAV_LINKS: NavLink[] = [
   { label: "About", href: "/about" },
   { label: "ISO 25553", href: "/iso-25553" },
-  { label: "NOHA", href: "https://agileageing.org/nof/", external: true },
-  { label: "Demonstrators", href: "/#demonstrator" },
-  { label: "Research", href: "https://agileageing.org/research/", external: true },
+  { label: "Research", href: "/research" },
+  { label: "Events", href: "/events" },
+  { label: "Videos", href: "/videos" },
+  { label: "Partners", href: "/partners" },
+  { label: "Team", href: "/team" },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [overDark, setOverDark] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -33,6 +36,31 @@ export function Navbar() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Adapt over a dark hero banner: a page can mark its opening section with
+  // data-dark-hero. While that banner still sits behind the bar, the navbar is
+  // transparent with light text; once scrolled past it, it turns solid.
+  useEffect(() => {
+    const banner = document.querySelector<HTMLElement>("[data-dark-hero]");
+    if (!banner) {
+      setOverDark(false);
+      return;
+    }
+    const NAV_HEIGHT_PX = 80;
+    const compute = () => {
+      setOverDark(banner.getBoundingClientRect().bottom > NAV_HEIGHT_PX);
+    };
+    compute();
+    window.addEventListener("scroll", compute, { passive: true });
+    window.addEventListener("resize", compute);
+    return () => {
+      window.removeEventListener("scroll", compute);
+      window.removeEventListener("resize", compute);
+    };
+  }, [pathname]);
+
+  // The open mobile sheet is light, so force the solid treatment then.
+  const dark = overDark && !mobileOpen;
 
   // Hide the bar once the hero has scrolled out of the navbar's zone.
   // Re-run on every route change: the Navbar stays mounted across client-side
@@ -63,7 +91,10 @@ export function Navbar() {
     <header
       aria-hidden={hidden}
       className={[
-        "fixed top-0 left-0 right-0 z-40 bg-stone/95 backdrop-blur-sm border-b border-ink/10 transition-[transform,opacity] duration-300 ease-out",
+        "fixed top-0 left-0 right-0 z-40 transition-[transform,opacity,background-color,border-color] duration-300 ease-out",
+        dark
+          ? "bg-transparent border-b border-transparent"
+          : "bg-stone/95 backdrop-blur-sm border-b border-ink/10",
         hidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100",
       ].join(" ")}
     >
@@ -81,16 +112,22 @@ export function Navbar() {
             priority
             className="h-7 w-7 md:h-8 md:w-8 select-none"
           />
-          <span className="hidden sm:inline font-serif text-[16px] md:text-[18px] tracking-tight leading-none text-ink">
+          <span
+            className={[
+              "hidden sm:inline font-serif text-[16px] md:text-[18px] tracking-tight leading-none transition-colors duration-300",
+              dark ? "text-white" : "text-ink",
+            ].join(" ")}
+          >
             Agile Ageing Alliance
           </span>
         </Link>
 
         {/* Desktop nav — flat links + one CTA */}
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
           {NAV_LINKS.map((link) => {
-            const linkClasses =
-              "text-ink/75 hover:text-ink text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]";
+            const linkClasses = dark
+              ? "text-white/85 hover:text-white text-[14px] xl:text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-[2px]"
+              : "text-ink/75 hover:text-ink text-[14px] xl:text-[14.5px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-stone rounded-[2px]";
             return link.external ? (
               <a
                 key={link.label}
@@ -107,8 +144,13 @@ export function Navbar() {
               </Link>
             );
           })}
-          <Button href={CONTACT_URL} external variant="ink" size="pill">
-            Contact
+          <Button
+            href={GET_INVOLVED_URL}
+            external
+            variant={dark ? "cream" : "ink"}
+            size="pill"
+          >
+            Get involved
           </Button>
         </nav>
 
@@ -118,7 +160,10 @@ export function Navbar() {
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
-          className="lg:hidden inline-flex items-center justify-center w-10 h-10 text-ink rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+          className={[
+            "lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-[4px] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2",
+            dark ? "text-white focus-visible:ring-white" : "text-ink focus-visible:ring-ink",
+          ].join(" ")}
         >
           <svg
             width="22"
@@ -180,8 +225,8 @@ export function Navbar() {
             );
           })}
           <div className="mt-4 pb-2">
-            <Button href={CONTACT_URL} external variant="ink" onClick={() => setMobileOpen(false)}>
-              Contact
+            <Button href={GET_INVOLVED_URL} external variant="ink" onClick={() => setMobileOpen(false)}>
+              Get involved
             </Button>
           </div>
         </nav>

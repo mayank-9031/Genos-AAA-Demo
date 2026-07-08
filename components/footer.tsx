@@ -1,12 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const FOOTER_NAV = [
-  { label: "About", href: "https://agileageing.org/page/about/" },
-  { label: "ISO 25553", href: "https://agileageing.org/standards/" },
-  { label: "NOHA", href: "https://agileageing.org/nof/" },
-  { label: "Research", href: "https://agileageing.org/research/" },
-  { label: "Events", href: "https://agileageing.org/events/" },
-  { label: "Contact", href: "https://agileageing.org/page/contact/" },
+  { label: "About", href: "/about" },
+  { label: "ISO 25553", href: "/iso-25553" },
+  { label: "Research", href: "/research" },
+  { label: "Events", href: "/events" },
+  { label: "Videos", href: "/videos" },
+  { label: "Partners", href: "/partners" },
+  { label: "Team", href: "/team" },
 ];
 
 export function Footer() {
@@ -40,14 +42,12 @@ export function Footer() {
             <ul className="mt-5 space-y-3">
               {FOOTER_NAV.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-stone hover:text-amber transition-colors duration-200 text-[15px]"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

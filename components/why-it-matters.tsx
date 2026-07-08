@@ -26,7 +26,7 @@ export function WhyItMatters() {
             </p>
           </Reveal>
           <Reveal delay={60} y={8}>
-            <h2 className="font-serif text-ink text-[24px] md:text-[32px] leading-[1.25] tracking-[-0.01em] mt-4">
+            <h2 className="font-serif text-ink text-[28px] md:text-[38px] leading-[1.18] tracking-[-0.015em] mt-4">
               Why a systems approach matters.
             </h2>
           </Reveal>
@@ -42,20 +42,23 @@ export function WhyItMatters() {
           </Reveal>
         </div>
 
-        <Reveal delay={180} y={10}>
-          <dl className="mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/10 border border-ink/10">
-            {AUDIENCES.map((item) => (
-              <div key={item.label} className="bg-stone p-7 md:p-8">
-                <dt className="font-serif text-ink text-[17px] md:text-[18px] leading-snug">
-                  {item.label}
-                </dt>
-                <dd className="text-charcoal text-[14.5px] leading-[1.65] mt-3">
-                  {item.body}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
+        <dl className="mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/10 border border-ink/10">
+          {AUDIENCES.map((item, i) => (
+            <Reveal
+              key={item.label}
+              delay={i * 120}
+              y={12}
+              className="bg-stone p-7 md:p-8"
+            >
+              <dt className="font-serif text-ink text-[17px] md:text-[18px] leading-snug">
+                {item.label}
+              </dt>
+              <dd className="text-charcoal text-[14.5px] leading-[1.65] mt-3">
+                {item.body}
+              </dd>
+            </Reveal>
+          ))}
+        </dl>
       </div>
     </section>
   );

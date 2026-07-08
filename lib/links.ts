@@ -9,3 +9,6 @@ export const ISO_OVERVIEW_PDF_URL =
   "https://www.agileageing.org/site_files/5944/upload_files/BSI-ISO25553-Stage2.pdf?dl=1";
 
 export const CONTACT_URL = "https://agileageing.org/page/contact/";
+
+export const YOUTUBE_CHANNEL_URL =
+  "https://www.youtube.com/@agileageingalliance6868";

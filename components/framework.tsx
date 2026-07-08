@@ -25,7 +25,7 @@ export function Framework() {
             </p>
           </Reveal>
           <Reveal delay={60} y={8}>
-            <h2 className="font-serif text-ink text-[24px] md:text-[32px] leading-[1.25] tracking-[-0.01em] mt-4">
+            <h2 className="font-serif text-ink text-[28px] md:text-[38px] leading-[1.18] tracking-[-0.015em] mt-4">
               An international standard, and the means to implement it.
             </h2>
           </Reveal>
@@ -37,17 +37,23 @@ export function Framework() {
           </Reveal>
         </div>
 
-        <Reveal delay={160} y={10}>
-          <div
-            role="list"
-            aria-label="Framework: from the alliance to local outcomes"
-            className="mt-12 md:mt-14 flex flex-col md:flex-row md:items-stretch"
-          >
-            {NODES.map((node, i) => (
-              <Fragment key={node.term}>
+        <div
+          role="list"
+          aria-label="Framework: from the alliance to local outcomes"
+          className="mt-12 md:mt-14 flex flex-col md:flex-row md:items-stretch"
+        >
+          {NODES.map((node, i) => (
+            <Fragment key={node.term}>
+              {/* Each node lands in sequence — the chain assembles left to right. */}
+              <Reveal
+                className="md:flex-1"
+                delay={i * 110}
+                y={10}
+                x={14}
+              >
                 <div
                   role="listitem"
-                  className="md:flex-1 bg-white border border-ink/12 rounded-[3px] p-5 flex flex-col"
+                  className="h-full bg-white border border-ink/12 rounded-[3px] p-5 flex flex-col"
                 >
                   <span className="text-sage text-[10px] tracking-[0.18em] uppercase">
                     {String(i + 1).padStart(2, "0")}
@@ -59,19 +65,25 @@ export function Framework() {
                     {node.caption}
                   </span>
                 </div>
-                {i < NODES.length - 1 && (
+              </Reveal>
+              {i < NODES.length - 1 && (
+                <Reveal
+                  delay={i * 110 + 70}
+                  y={0}
+                  className="flex items-center justify-center shrink-0"
+                >
                   <div
                     aria-hidden="true"
-                    className="flex items-center justify-center text-ink/30 shrink-0 py-1.5 md:py-0 md:px-2.5"
+                    className="flex items-center justify-center text-ink/30 py-1.5 md:py-0 md:px-2.5"
                   >
                     <span className="md:hidden">↓</span>
                     <span className="hidden md:inline">→</span>
                   </div>
-                )}
-              </Fragment>
-            ))}
-          </div>
-        </Reveal>
+                </Reveal>
+              )}
+            </Fragment>
+          ))}
+        </div>
       </div>
     </section>
   );

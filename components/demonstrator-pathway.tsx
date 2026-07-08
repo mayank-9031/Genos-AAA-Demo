@@ -27,7 +27,7 @@ export function DemonstratorPathway() {
             </p>
           </Reveal>
           <Reveal delay={60} y={8}>
-            <h2 className="font-serif text-ink text-[24px] md:text-[32px] leading-[1.25] tracking-[-0.01em] mt-4">
+            <h2 className="font-serif text-ink text-[28px] md:text-[38px] leading-[1.18] tracking-[-0.015em] mt-4">
               The demonstrator pathway
             </h2>
           </Reveal>
@@ -41,23 +41,27 @@ export function DemonstratorPathway() {
           </Reveal>
         </div>
 
-        <Reveal delay={180} y={10}>
-          <ol className="mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/10 border border-ink/10">
-            {STEPS.map((step, i) => (
-              <li key={step.label} className="bg-cream p-7 md:p-8">
-                <span className="block text-sage text-[10.5px] tracking-[0.18em] uppercase">
-                  Step {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="block font-serif text-ink text-[18px] md:text-[19px] mt-3">
-                  {step.label}
-                </span>
-                <span className="block text-charcoal text-[14.5px] leading-[1.6] mt-3">
-                  {step.body}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
+        <ol className="mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/10 border border-ink/10">
+          {STEPS.map((step, i) => (
+            <Reveal
+              key={step.label}
+              as="li"
+              delay={i * 120}
+              y={12}
+              className="bg-cream p-7 md:p-8"
+            >
+              <span className="block text-sage text-[10.5px] tracking-[0.18em] uppercase">
+                Step {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="block font-serif text-ink text-[18px] md:text-[19px] mt-3">
+                {step.label}
+              </span>
+              <span className="block text-charcoal text-[14.5px] leading-[1.6] mt-3">
+                {step.body}
+              </span>
+            </Reveal>
+          ))}
+        </ol>
 
         <Reveal delay={240} y={8}>
           <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
