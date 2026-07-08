@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_URL } from "@/lib/links";
@@ -21,6 +22,7 @@ const NAV_LINKS: NavLink[] = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
 
@@ -33,9 +35,15 @@ export function Navbar() {
   }, []);
 
   // Hide the bar once the hero has scrolled out of the navbar's zone.
+  // Re-run on every route change: the Navbar stays mounted across client-side
+  // navigation (it lives in the root layout), so a stale hero reference or a
+  // page with no hero at all must not leave it stuck hidden.
   useEffect(() => {
     const hero = document.getElementById("top");
-    if (!hero) return;
+    if (!hero) {
+      setHidden(false);
+      return;
+    }
     const NAV_HEIGHT_PX = 80;
     const compute = () => {
       const pastHero = hero.getBoundingClientRect().bottom <= NAV_HEIGHT_PX;
@@ -49,7 +57,7 @@ export function Navbar() {
       window.removeEventListener("scroll", compute);
       window.removeEventListener("resize", compute);
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <header
